@@ -149,9 +149,13 @@ public class WindowManager {
 			submitBtn.addActionListener(
 					new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					
+					boolean error = DBConnect.create(name.getText(),address.getText());
+					if(error) {
+						return;
+					}
 					createFrame.setVisible(false);
 					cancel();
-					createAcc(name.getText(),address.getText());
 				}
 			});
 		}

@@ -7,10 +7,10 @@ import java.sql.Statement;
 public abstract class DBConnect {
 	Connection con =null;
 	Statement st = null;
-	public static void create(String name, String address) {
+	public static boolean create(String name, String address) {
 		if(name.equals("")||name==null||address.equals("")||address==null) {
 			WindowManager.generateError("Invalid input");
-			return;
+			return true;
 		}
 
 		try {
@@ -27,7 +27,7 @@ public abstract class DBConnect {
 		}catch(Exception se) {
 			
 		}
-		
+		return false;
 		
 	}
 	public static void deposit(String id, String amount) {
