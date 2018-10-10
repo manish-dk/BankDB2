@@ -8,14 +8,43 @@ public class WindowManager {
 		Frame depositFrame;
 		Frame withdrawFrame;
 		Frame balanceFrame;
+		static Frame errorFrame;
 		TextField name;
 		TextField address;
 		TextField id;
 		TextField amount;
 		TextField balance;
-		GridLayout grid = new GridLayout(5,4);
-		FlowLayout flow = new FlowLayout();
+		Label n;
+		Label a;
+		Label b;
+		static GridLayout grid = new GridLayout(5,4);
+		static FlowLayout flow = new FlowLayout();
 		
+		public static void generateError(String message) {
+			errorFrame = new Frame("Error");
+			errorFrame.setSize(300,100);
+			Panel upperPanel = new Panel();
+			Panel lowerPanel = new Panel();
+			upperPanel.setBackground(Color.GRAY);
+			lowerPanel.setBackground(Color.GRAY);
+			Button okBtn = new Button("OK");
+			Label messageLabel = new Label(message);
+			upperPanel.setVisible(true);
+			upperPanel.setLayout(flow);
+			lowerPanel.setVisible(true);
+			lowerPanel.setLayout(flow);
+			upperPanel.add(messageLabel);
+			lowerPanel.add(okBtn);
+			errorFrame.add(upperPanel,BorderLayout.NORTH);
+			errorFrame.add(lowerPanel,BorderLayout.CENTER);
+			errorFrame.setVisible(true);
+			okBtn.addActionListener(
+					new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					errorFrame.setVisible(false);
+				}
+			});
+		}
 		public void home() {
 			
 			outer = new Frame("Bank");
@@ -226,44 +255,59 @@ public class WindowManager {
 		}
 		
 		public void balance() {
-			createFrame = new Frame("Check Balance");
-			createFrame.setVisible(true);
-			createFrame.setSize(300,400);
+			balanceFrame = new Frame("Check Balance");
+			balanceFrame.setVisible(true);
+			balanceFrame.setSize(300,500);
 			Panel buttonPanel = new Panel();
 			Panel upperPanel = new Panel();
 			Panel lowerPanel = new Panel();
 			upperPanel.setVisible(true);
 			upperPanel.setLayout(flow);
 			lowerPanel.setVisible(true);
-			lowerPanel.setLayout(flow);
+			lowerPanel.setLayout(grid);
 			buttonPanel.setVisible(true);
 			buttonPanel.setLayout(grid);
-			createFrame.add(buttonPanel,BorderLayout.SOUTH);
-			createFrame.add(upperPanel,BorderLayout.NORTH);
-			createFrame.add(lowerPanel,BorderLayout.CENTER);
+			balanceFrame.add(buttonPanel,BorderLayout.SOUTH);
+			balanceFrame.add(upperPanel,BorderLayout.NORTH);
+			balanceFrame.add(lowerPanel,BorderLayout.CENTER);
 			Label i = new Label("Enter Account num: ");
-			Label n = new Label("Name: ");
-			Label a = new Label("Address: ");
-			Label b = new Label("Balance: ");
 			id = new TextField();
-			name = new TextField();
-			address = new TextField();
-			balance = new TextField();
+			id.setColumns(10);
+			n = new Label("Name: ");
+			a = new Label("Address: ");
+			b = new Label("Balance: ");
+			Label name = new Label();
+			Label address = new Label();
+			Label balance = new Label();
 			Button submitBtn = new Button("Check Balance");
 			Button cancelBtn = new Button("Cancel");
 			
-			name.setColumns(20);
-			address.setColumns(20);
+			
 			upperPanel.add(i);
 			upperPanel.add(id);
-			upperPanel.add(n);
-			upperPanel.add(name);
+			lowerPanel.add(n);
+			lowerPanel.add(name);
 			lowerPanel.add(a);
 			lowerPanel.add(address);
 			lowerPanel.add(b);
 			lowerPanel.add(balance);
 			buttonPanel.add(submitBtn);
 			buttonPanel.add(cancelBtn);
+			
+			cancelBtn.addActionListener(
+					new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					balanceFrame.setVisible(false);
+					cancel();
+				}
+			});
+			
+			submitBtn.addActionListener(
+					new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					DBConnect.balance(id.getText(),n,a,b);
+				}
+			});
 		}
 		
 		public void deposit(String id, String amount) {
@@ -281,4 +325,5 @@ public class WindowManager {
 		public void createAcc(String name,String address) {
 			DBConnect.create(name, address);
 		}
+		
 }
