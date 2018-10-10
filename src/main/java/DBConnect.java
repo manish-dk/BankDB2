@@ -7,8 +7,8 @@ import java.sql.Statement;
 public abstract class DBConnect {
 	Connection con =null;
 	Statement st = null;
-	public static boolean create(String name, String address) {
-		if(name.equals("")||name==null||address.equals("")||address==null) {
+	public static boolean create(String password, String name, String address) {
+		if(name.equals("")||name==null||address.equals("")||address==null||password.equals("")||password==null) {
 			WindowManager.generateError("Invalid input");
 			return true;
 		}
@@ -19,7 +19,7 @@ public abstract class DBConnect {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bank","root","");
 			st = con.createStatement();
-			String query = "INSERT INTO account(name,address) VALUES('"+name+"','"+address+"')";
+			String query = "INSERT INTO account(name,address,password) VALUES('"+name+"','"+address+"','"+password+"')";
 			System.out.println(query);
 			st.executeUpdate(query);
 			st.close();
@@ -47,7 +47,7 @@ public abstract class DBConnect {
 			
 		}
 	}
-	public static void withdraw(String id, String amount) {
+	public static boolean withdraw(String id, String amount,String password) {
 		double deposits = 0;
 		double withdraws = 0;
 		try {
@@ -56,6 +56,17 @@ public abstract class DBConnect {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bank","root","");
 			st = con.createStatement();
+			
+			ResultSet rsAccount = st.executeQuery("SELECT * FROM account WHERE accountnumber="+id);
+			while(rsAccount.next()) {
+				String pass = rsAccount.getString(4);
+				if(!pass.equals(password)) {
+					WindowManager.generateError("Wrong Password");
+					return true;
+				}
+				
+			}
+			
 			
 			ResultSet rs = st.executeQuery("SELECT * FROM deposits WHERE accountnumber="+id);
 			while(rs.next()) {
@@ -71,7 +82,7 @@ public abstract class DBConnect {
 			}
 			if(Double.parseDouble(amount) > deposits-withdraws) {
 				WindowManager.generateError("Not Enough Funds");
-				return;
+				return true;
 			}
 			String query = "INSERT INTO withdraws VALUES("+Integer.parseInt(id)+","+Double.parseDouble(amount)+",CURDATE())";
 			System.out.println(query);
@@ -81,6 +92,7 @@ public abstract class DBConnect {
 		}catch(Exception se) {
 			
 		}
+		return false;
 	}
 	
 	public static void balance(String id, Label n, Label a, Label b) {

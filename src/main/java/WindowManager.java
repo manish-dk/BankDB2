@@ -12,6 +12,7 @@ public class WindowManager {
 		TextField name;
 		TextField address;
 		TextField id;
+		TextField password;
 		TextField amount;
 		TextField balance;
 		Label n;
@@ -117,7 +118,7 @@ public class WindowManager {
 			upperPanel.setVisible(true);
 			upperPanel.setLayout(flow);
 			lowerPanel.setVisible(true);
-			lowerPanel.setLayout(flow);
+			lowerPanel.setLayout(grid);
 			buttonPanel.setVisible(true);
 			buttonPanel.setLayout(grid);
 			createFrame.add(buttonPanel,BorderLayout.SOUTH);
@@ -125,17 +126,21 @@ public class WindowManager {
 			createFrame.add(lowerPanel,BorderLayout.CENTER);
 			Label n = new Label("Name: ");
 			Label a = new Label("Address: ");
+			Label p = new Label("Password: ");
 			name = new TextField();
 			address = new TextField();
+			password = new TextField();
 			Button submitBtn = new Button("Create Account");
 			Button cancelBtn = new Button("Cancel");
 			
 			name.setColumns(20);
 			address.setColumns(20);
-			upperPanel.add(n);
-			upperPanel.add(name);
+			lowerPanel.add(n);
+			lowerPanel.add(name);
 			lowerPanel.add(a);
 			lowerPanel.add(address);
+			lowerPanel.add(p);
+			lowerPanel.add(password);
 			buttonPanel.add(submitBtn);
 			buttonPanel.add(cancelBtn);
 			
@@ -150,7 +155,7 @@ public class WindowManager {
 					new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					boolean error = DBConnect.create(name.getText(),address.getText());
+					boolean error = DBConnect.create(password.getText(),name.getText(),address.getText());
 					if(error) {
 						return;
 					}
@@ -176,18 +181,23 @@ public class WindowManager {
 			withdrawFrame.add(upperPanel,BorderLayout.NORTH);
 			withdrawFrame.add(lowerPanel,BorderLayout.CENTER);
 			Label n = new Label("ID: ");
+			Label p = new Label("Password: ");
 			Label a = new Label("Amount: ");
 			id = new TextField();
 			amount = new TextField();
+			password = new TextField();
 			Button submitBtn = new Button("Withdraw");
 			Button cancelBtn = new Button("Cancel");
 			
 			id.setColumns(20);
 			amount.setColumns(20);
+			password.setColumns(20);
 			upperPanel.add(n);
 			upperPanel.add(id);
 			lowerPanel.add(a);
 			lowerPanel.add(amount);
+			lowerPanel.add(p);
+			lowerPanel.add(password);
 			buttonPanel.add(submitBtn);
 			buttonPanel.add(cancelBtn);
 			
@@ -201,9 +211,12 @@ public class WindowManager {
 			submitBtn.addActionListener(
 					new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					boolean error = DBConnect.withdraw(id.getText(),amount.getText(),password.getText());
+					if(error) {
+						return;
+					}
 					withdrawFrame.setVisible(false);
 					cancel();
-					withdraw(id.getText(),amount.getText());
 				}
 			});
 			
@@ -318,16 +331,9 @@ public class WindowManager {
 			DBConnect.deposit(id, amount);
 		}
 		
-		public void withdraw(String id, String amount) {
-			DBConnect.withdraw(id, amount);
-		}
-		
 		public void cancel() {
 			outer.setVisible(true);
 		}
 		
-		public void createAcc(String name,String address) {
-			DBConnect.create(name, address);
-		}
 		
 }
