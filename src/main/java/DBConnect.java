@@ -5,11 +5,17 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public abstract class DBConnect {
-	static Connection con =null;
-	static Statement st = null;
+	Connection con =null;
+	Statement st = null;
 	public static void create(String name, String address) {
+		if(name.equals("")||name==null||address.equals("")||address==null) {
+			WindowManager.generateError("Invalid input");
+			return;
+		}
 
 		try {
+			Connection con =null;
+			Statement st = null;
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bank","root","");
 			st = con.createStatement();
@@ -27,6 +33,8 @@ public abstract class DBConnect {
 	public static void deposit(String id, String amount) {
 	
 		try {
+			Connection con =null;
+			Statement st = null;
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bank","root","");
 			st = con.createStatement();
@@ -43,6 +51,8 @@ public abstract class DBConnect {
 		double deposits = 0;
 		double withdraws = 0;
 		try {
+			Connection con =null;
+			Statement st = null;
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bank","root","");
 			st = con.createStatement();
@@ -81,7 +91,8 @@ public abstract class DBConnect {
 			return;
 		}
 		try {
-			
+			Connection con =null;
+			Statement st = null;
 			String name="";
 			String address="";
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -118,11 +129,13 @@ public abstract class DBConnect {
 	
 	public static boolean checkAcc(String id) {
 		try {
+			Connection con =null;
+			Statement st = null;
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bank","root","");
 			st = con.createStatement();
 			
-			ResultSet rs = st.executeQuery("SELECT * FROM deposits WHERE accountnumber="+id);
+			ResultSet rs = st.executeQuery("SELECT * FROM account WHERE accountnumber="+id);
 			if(rs.next()) {
 				return true;
 			}
