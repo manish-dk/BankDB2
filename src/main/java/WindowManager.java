@@ -68,44 +68,29 @@ public class WindowManager {
 			buttonPanel.add(withdrawBtn);
 			buttonPanel.add(exitBtn);
 			
-			createBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			createBtn.addActionListener(e -> {
 					outer.setVisible(false);
 					create();
-				}
-			});
+				});
 			
-			balanceBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			balanceBtn.addActionListener(e -> {
 					outer.setVisible(false);
 					balance();
-				}
-			});
+				});
 			
-			depositBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			depositBtn.addActionListener(e -> {
 					outer.setVisible(false);
 					deposit();
-				}
-			});
+				});
 			
-			withdrawBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			withdrawBtn.addActionListener(e -> {
 					outer.setVisible(false);
 					withdraw();
-				}
-			});
+				});
 			
-			exitBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			exitBtn.addActionListener(e -> {
 					System.exit(0);
-				}
-			});
+				});
 		}
 		
 		public void create() {
@@ -144,16 +129,12 @@ public class WindowManager {
 			buttonPanel.add(submitBtn);
 			buttonPanel.add(cancelBtn);
 			
-			cancelBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			cancelBtn.addActionListener(e -> {
 					createFrame.setVisible(false);
 					cancel();
-				}
-			});
-			submitBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+				});
+			
+			submitBtn.addActionListener(e -> {
 					
 					boolean error = DBConnect.create(password.getText(),name.getText(),address.getText());
 					if(error) {
@@ -161,8 +142,7 @@ public class WindowManager {
 					}
 					createFrame.setVisible(false);
 					cancel();
-				}
-			});
+				});
 		}
 		public void withdraw() {
 			withdrawFrame = new Frame("Withdraw Money");
@@ -201,24 +181,19 @@ public class WindowManager {
 			buttonPanel.add(submitBtn);
 			buttonPanel.add(cancelBtn);
 			
-			cancelBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			cancelBtn.addActionListener(e -> {
 					withdrawFrame.setVisible(false);
 					cancel();
-				}
-			});
-			submitBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+				});
+			
+			submitBtn.addActionListener(e -> {
 					boolean error = DBConnect.withdraw(id.getText(),amount.getText(),password.getText());
 					if(error) {
 						return;
 					}
 					withdrawFrame.setVisible(false);
 					cancel();
-				}
-			});
+				});
 			
 		}
 		public void deposit() {
@@ -253,22 +228,16 @@ public class WindowManager {
 			buttonPanel.add(submitBtn);
 			buttonPanel.add(cancelBtn);
 			
-			cancelBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			cancelBtn.addActionListener(e -> {
 					depositFrame.setVisible(false);
 					cancel();
-				}
-			});
+				});
 			
-			submitBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			submitBtn.addActionListener(e -> {
 					depositFrame.setVisible(false);
 					cancel();
 					deposit(id.getText(),amount.getText());
-				}
-			});
+				});
 		}
 		
 		public void balance() {
@@ -311,20 +280,14 @@ public class WindowManager {
 			buttonPanel.add(submitBtn);
 			buttonPanel.add(cancelBtn);
 			
-			cancelBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			cancelBtn.addActionListener(e -> {
 					balanceFrame.setVisible(false);
 					cancel();
-				}
-			});
+				});
 			
-			submitBtn.addActionListener(
-					new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			submitBtn.addActionListener(e -> {
 					DBConnect.balance(id.getText(),n,a,b);
-				}
-			});
+				});
 		}
 		
 		public void deposit(String id, String amount) {
